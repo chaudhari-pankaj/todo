@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo</title>
+</head>
+<body>
+    <h1>Todo list</h1>
+    <table>
+        <tr>
+            <th>userID</th>
+            <th>dueDate</th>
+            <th>task</th>
+        </tr>
+        <% for(let iter = 0; iter < todos.length; iter++) { %>
+            <tr>
+                <td><%=todos[iter].userID%></td>
+                <td><%=todos[iter].dueDate.toISOString().split('T')[0];%></td>
+                <td><%=todos[iter].task%></td>
+            </tr>
+        <% } %>
+    </table>
+</body>
+</html>
