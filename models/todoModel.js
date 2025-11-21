@@ -21,7 +21,7 @@ const createTable = async () => {
 };
 
 const showAllTodos = async () => {
-    const showAllTodosSQL = 'SELECT * FROM todo;';
+    const showAllTodosSQL = 'SELECT * FROM todo ORDER BY completed,dueDate ASC;';
     try {
         let [result] = await pool.query(showAllTodosSQL);
         return result;
@@ -36,7 +36,7 @@ const addTodo = async (newTodo) => {
         (todoID,userId,dueDate,task,completed)
         VALUES
         (?,?,?,?,?);`
-    let placeholder = [randomUUID(),newTodo.userID,newTodo.dueDate,newTodo.task,newTodo.completed];
+    let placeholder = [randomUUID(),'userid',newTodo.dueDate,newTodo.task,0];
     try {
         let [result] = await pool.query(addTodoSQL,placeholder);
         return result;
@@ -59,4 +59,17 @@ const deleteTodo = async (todo) => {
         console.log("an error occured during deletion",err);
     }
 };
-module.exports = { createTable, showAllTodos , addTodo , deleteTodo};
+
+const completedTodo = async (todo) => {
+    let completedTodoSQL = `UPDATE todo SET completed = 1 WHERE todoID = ?`;
+    let placeholder = [todo.todoID];
+    try {
+        let result = pool.query(completedTodoSQL,placeholder);
+        return result;
+    }
+    catch(err){
+        console.log("error while marking as compeleted",err);
+    }
+};
+
+module.exports = { createTable, showAllTodos , addTodo , deleteTodo, completedTodo };

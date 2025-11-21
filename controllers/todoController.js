@@ -1,4 +1,4 @@
-const { showAllTodos, addTodo, deleteTodo } = require('../models/todoModel.js');
+const { showAllTodos, addTodo, deleteTodo, completedTodo } = require('../models/todoModel.js');
 
 
 const getTodos = async (request,response) => {
@@ -33,4 +33,14 @@ const deleteChosenTodo = async (request,response) => {
     }
 };
 
-module.exports = { getTodos , addNewTodo, deleteChosenTodo };
+const markCompleted = async (request,response) => {
+    try {
+        let result = await completedTodo(request.params);
+        response.status(200).json({redirectURL : "http://localhost:3000/todo"});
+    }
+    catch(err) {
+        response.status(500).send("couldn't mark as completed, try again later",err);
+    }
+}
+
+module.exports = { getTodos , addNewTodo, deleteChosenTodo, markCompleted };
