@@ -9,17 +9,48 @@
     <h1>Todo list</h1>
     <table>
         <tr>
+            <th>todoID</th>
             <th>userID</th>
             <th>dueDate</th>
             <th>task</th>
+            <th>completed</th>
         </tr>
         <% for(let iter = 0; iter < todos.length; iter++) { %>
             <tr>
+                <td><%=todos[iter].todoID%></td>
                 <td><%=todos[iter].userID%></td>
                 <td><%=todos[iter].dueDate.toISOString().split('T')[0];%></td>
                 <td><%=todos[iter].task%></td>
+                <td><%=todos[iter].completed%></td>
+                <td>
+                    <button class = "deleteTodo" todoID =<%=todos[iter].todoID%>>delete</button>
+                </td>
             </tr>
         <% } %>
     </table>
+    <script>
+        let deleteButton = document.querySelectorAll(".deleteTodo");
+        deleteButton.forEach( button => {
+            button.addEventListener('click', async (event) => {
+                try {
+                    let todoID = event.target.getAttribute("todoID");
+
+                    let response = await fetch(`http://localhost:3000/todo/${todoID}`, {
+                        method : 'DELETE',
+                    });
+
+                    if (response.ok) {
+                        window.location.href = (await response.json()).redirectURL;
+                    }
+                    else {
+                        console.log("couldn't delete todo, try again later");
+                    }
+                }
+                catch(err) {
+                    console.log("couldn't delete todo, try again later",err);
+                }
+            });
+        });
+    </script>
 </body>
 </html>

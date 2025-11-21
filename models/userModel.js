@@ -3,7 +3,7 @@ const { pool } = require('../database/connect_db.js');
 const createUserTable = async() => {
     const userTableSQL = `
         CREATE TABLE IF NOT EXISTS user (
-        user_id varchar(50),
+        user_id varchar(50) PRIMARY KEY,
         user_name varchar(50),
         password varchar(50)
         );`;
