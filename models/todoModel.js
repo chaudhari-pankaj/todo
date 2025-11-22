@@ -35,7 +35,7 @@ const addTodo = async (newTodo) => {
     const addTodoSQL = `INSERT INTO todo
         (todoID,userId,dueDate,task,completed)
         VALUES
-        (?,?,?,?,?);`
+        (?,?,?,?,?);`;
     let placeholder = [randomUUID(),'userid',newTodo.dueDate,newTodo.task,0];
     try {
         let [result] = await pool.query(addTodoSQL,placeholder);

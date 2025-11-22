@@ -1,4 +1,5 @@
 const { pool } = require('../database/connect_db.js');
+const { randomUUID } = require('crypto');
 
 const createUserTable = async() => {
     const userTableSQL = `
@@ -17,4 +18,20 @@ const createUserTable = async() => {
     }
 }
 
-module.exports = { createUserTable };
+const addUser = async(user) => {
+    const addUserSQL = `INSERT INTO user
+    (userID,userName,password)    
+    VALUES
+    (?,?,?);`;
+    let placeHolder = [randomUUID(),user.username,user.password];
+    try {
+        let result = await pool.query(addUserSQL,placeHolder);
+        return result;
+    }
+    catch(err) {
+        console.log("couldn't add the user to database");
+        throw err;
+    }
+
+}
+module.exports = { createUserTable, addUser };

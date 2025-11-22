@@ -1,7 +1,7 @@
 const express = require('express');
 const todoRouter = express.Router();
 
-const { getTodos,addNewTodo,deleteChosenTodo,markCompleted } = require('../controllers/todoController.js');
+const { getTodos, addNewTodo, deleteChosenTodo, markCompleted} = require('../controllers/todoController.js');
 
 todoRouter.use(express.urlencoded({extended : true}));
 
