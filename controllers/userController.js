@@ -8,6 +8,7 @@ const signup = async (request,response) => {
         console.log("error in rendering signup",err);
     }
 };
+
 const login = async (request,response) => {
     try {
         response.status(200).render("login.ejs");
@@ -20,7 +21,7 @@ const login = async (request,response) => {
 const addNewUser = async (request,response) => {
     try {
         let result = addUser(request.body);
-        response.redirect("http://localhost:3000/todo");
+        response.redirect("/login");
     }
     catch(err) {
         console.log("error in signing up, pls try again", err);

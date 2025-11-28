@@ -1,13 +1,20 @@
 const express = require('express');
 const userRouter = express.Router();
+const passport = require('passport');
 
 const { signup, login, addNewUser} = require('../controllers/userController.js');
 
-userRouter.use(express.urlencoded({extended : true}));
 
-userRouter.get("/todo/signup",signup);
-userRouter.post("/todo/signup",addNewUser);
-userRouter.get("/todo/login",login);
-// userRouter.post("/todo/login",authenticateUser);
+userRouter.post("/login",passport.authenticate('local',{ successRedirect : "/todo", failureRedirect: "/login"}));
+userRouter.get("/signup",signup);
+userRouter.post("/signup",addNewUser);
+userRouter.get("/login",login);
+userRouter.get("/logout",(request,response) => {
+    request.logout((err) => {
+        if(err)
+            throw(err);
+    });
+    response.render("logout.ejs");
+});
 
 module.exports = { userRouter };

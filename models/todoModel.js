@@ -64,7 +64,7 @@ const completedTodo = async (todo) => {
     let completedTodoSQL = `UPDATE todo SET completed = 1 WHERE todoID = ?`;
     let placeholder = [todo.todoID];
     try {
-        let result = pool.query(completedTodoSQL,placeholder);
+        let result = await pool.query(completedTodoSQL,placeholder);
         return result;
     }
     catch(err){
