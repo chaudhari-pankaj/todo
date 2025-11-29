@@ -8,6 +8,7 @@
 <body>
     <h1>Sign up</h1>
     <form action = "/signup" method = "POST">
+        <input name = "_csrf" value ="<%=token%>" type = "hidden"/>
         <label for = "username">username</label>
         <input type = "text" name = "username" required/>
         <label for = "password">password</label>

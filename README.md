@@ -1,9 +1,10 @@
 >> user auth and authorization
      //implement sign-in
-     hash the passwords and store them
+     //hash the passwords and store them
      //show only their todo tasks
 >> security
      add csrf token
+     implement .evn file to save important stuff
 >> todo functionality
     // add new todo
     // delete existing todo

@@ -2,7 +2,8 @@ const { addUser } = require("../models/userModel.js");
 
 const signup = async (request,response) => {
     try {
-        response.status(200).render("signup.ejs");
+        const csrfToken = request.csrfToken();
+        response.status(200).render("signup.ejs",{token :csrfToken});
     }
     catch(err) {
         console.log("error in rendering signup",err);
@@ -11,7 +12,8 @@ const signup = async (request,response) => {
 
 const login = async (request,response) => {
     try {
-        response.status(200).render("login.ejs");
+        const csrfToken = request.csrfToken();
+        response.status(200).render("login.ejs",{token : csrfToken});
     }
     catch(err) {
         console.log("error in rendering login",err);

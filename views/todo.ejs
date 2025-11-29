@@ -37,6 +37,7 @@
                 <th>task</th>
             </tr>
             <form action = "http://localhost:3000/todo" method = 'POST'>
+                <input type = "hidden" name = "_csrf" value = "<%=csrfToken%>" />
                 <tr>
                     <td>
                         <input name = "dueDate" type = "date" required/>
@@ -62,6 +63,8 @@
                 try {
                     let response = await fetch(`http://localhost:3000/todo/${todoID}`,{
                         method : 'PATCH',
+                        headers: { 'Content-Type': 'application/json' },
+                        body : JSON.stringify({ "_csrf" : "<%=csrfToken%>"}) 
                     });
                     if(response.ok) {
                         window.location.href = (await response.json()).redirectURL;
@@ -81,6 +84,8 @@
 
                     let response = await fetch(`http://localhost:3000/todo/${todoID}`, {
                         method : 'DELETE',
+                        headers: { 'Content-Type': 'application/json' },
+                        body : JSON.stringify({ "_csrf" : "<%=csrfToken%>"})                        
                     });
 
                     if (response.ok) {

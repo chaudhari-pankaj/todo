@@ -1,11 +1,12 @@
 const { showAllTodos, addTodo, deleteTodo, completedTodo } = require('../models/todoModel.js');
-
+const csrf = require('tiny-csrf');
 
 const getTodos = async (request,response) => {
     try {
+        const csrfToken = request.csrfToken();
         let todos = await showAllTodos(request.user);
         response.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-        response.status(200).render("todo.ejs",{ todos });
+        response.status(200).render("todo.ejs",{ todos, csrfToken });
     }
     catch(err) {
         response.status(500).send("couldn't retrieve all the todos");

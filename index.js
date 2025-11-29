@@ -4,7 +4,10 @@ const path = require('path');
 const session = require('express-session');
 const passport = require('passport');
 const localStrategy = require('passport-local');
-const mysqlstore =require('express-mysql-session')(session);
+const mysqlstore = require('express-mysql-session')(session);
+const bcrypt = require('bcrypt');
+const csrf = require('tiny-csrf');
+const cookieParser = require('cookie-parser');
 
 const {pool} = require('./database/connect_db.js');
 const { Router }  = require('./routes/route.js');
@@ -14,7 +17,9 @@ const { userRouter } = require('./routes/userRoutes.js');
 app.set('view-engine','ejs');
 app.set('views',path.join(__dirname,"/views"));
 
+app.use(express.json());
 app.use(express.urlencoded({extended : true}));
+app.use(cookieParser("cookie-parser-secret"));
 
 const sessionStore = new mysqlstore({},pool);
 
@@ -28,6 +33,11 @@ app.use(session({
         maxAge : 10 * 60 * 1000 //10 minutes
     }
 }));
+
+app.use(csrf(
+    "1234567890thisisasecretkeykeepsa",
+    ["POST","PATCH","DELETE","PUT"]
+));// must be 32 characters long
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -44,12 +54,18 @@ const strategy = new localStrategy(async (username,password,done) => {
     try {
         const [result] = await pool.query(userSql,placeHolder);
         if(result.length) {
-            if(result[0].password == password) {
-                return done(null,result[0]);
+            try {
+                const isValid = await bcrypt.compare(password,result[0].password);
+                if(isValid) {
+                    return done(null,result[0]);
+                }
+                else{
+                    console.log("incorrect password");
+                    return done(null,false);
+                }
             }
-            else{
-                console.log("incorrect password");
-                return done(null,false);
+            catch(err) {
+                throw err;
             }
         }
         else{
