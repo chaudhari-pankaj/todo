@@ -3,7 +3,8 @@ const { showAllTodos, addTodo, deleteTodo, completedTodo } = require('../models/
 
 const getTodos = async (request,response) => {
     try {
-        let todos = await showAllTodos();
+        let todos = await showAllTodos(request.user);
+        response.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
         response.status(200).render("todo.ejs",{ todos });
     }
     catch(err) {
@@ -13,7 +14,7 @@ const getTodos = async (request,response) => {
 
 const addNewTodo = async (request,response) => {
     try {
-        let result = await addTodo(request.body);
+        let result = await addTodo(request.body,request.user);
         response.status(200).redirect("http://localhost:3000/todo");
     }
     catch(err) {

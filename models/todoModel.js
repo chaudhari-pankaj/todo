@@ -20,10 +20,11 @@ const createTable = async () => {
     }
 };
 
-const showAllTodos = async () => {
-    const showAllTodosSQL = 'SELECT * FROM todo ORDER BY completed,dueDate ASC;';
+const showAllTodos = async (user) => {
+    const showAllTodosSQL = 'SELECT * FROM todo WHERE userID = ? ORDER BY completed,dueDate ASC;';
+    const placeholder = [user.userID];
     try {
-        let [result] = await pool.query(showAllTodosSQL);
+        let [result] = await pool.query(showAllTodosSQL,placeholder);
         return result;
     }
     catch(err) {
@@ -31,12 +32,12 @@ const showAllTodos = async () => {
     }
 }
 
-const addTodo = async (newTodo) => {
+const addTodo = async (newTodo,user) => {
     const addTodoSQL = `INSERT INTO todo
         (todoID,userId,dueDate,task,completed)
         VALUES
         (?,?,?,?,?);`;
-    let placeholder = [randomUUID(),'userid',newTodo.dueDate,newTodo.task,0];
+    let placeholder = [randomUUID(),user.userID,newTodo.dueDate,newTodo.task,0];
     try {
         let [result] = await pool.query(addTodoSQL,placeholder);
         return result;

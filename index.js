@@ -23,7 +23,7 @@ app.use(session({
     store : sessionStore,
     resave : false,
     rolling : true,
-    saveUninitialized : true,
+    saveUninitialized : false,
     cookie : {
         maxAge : 10 * 60 * 1000 //10 minutes
     }

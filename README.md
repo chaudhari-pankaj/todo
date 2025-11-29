@@ -1,6 +1,7 @@
 >> user auth and authorization
-     implement sign-in 
-     show only their todo tasks
+     //implement sign-in
+     hash the passwords and store them
+     //show only their todo tasks
 >> security
      add csrf token
 >> todo functionality
