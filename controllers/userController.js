@@ -1,4 +1,4 @@
-const { addUser } = require("../models/userModel.js");
+const { addUser, usernameTaken } = require("../models/userModel.js");
 
 const signup = async (request,response) => {
     try {
@@ -21,12 +21,19 @@ const login = async (request,response) => {
 };
 
 const addNewUser = async (request,response) => {
-    try {
-        let result = addUser(request.body);
-        response.redirect("/login");
+    let isTaken = await usernameTaken(request.body.username);
+    if(!isTaken) {
+        try {
+            let result = await addUser(request.body);
+            response.redirect("/login");
+        }
+        catch(err) {
+            console.log("error in signing up, pls try again", err);
+        }
     }
-    catch(err) {
-        console.log("error in signing up, pls try again", err);
+    else {
+        request.flash("error","username is already taken");
+        response.redirect("/signup");
     }
 };
 

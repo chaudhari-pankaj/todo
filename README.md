@@ -4,7 +4,7 @@
      //show only their todo tasks
 >> security
      //add csrf token
-     implement .evn file to save important stuff
+     //implement .evn file to save important stuff
 >> todo functionality
     // add new todo
     // delete existing todo
@@ -16,6 +16,7 @@
 >>ux
     // show the items that are past the due date first
     // show upcoming todos with latest deadline appearing first
+    // add connect-flash to show messages such as username doesn't exist
 
 //notes
 

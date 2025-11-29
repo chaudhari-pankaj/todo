@@ -8,6 +8,7 @@ const mysqlstore = require('express-mysql-session')(session);
 const bcrypt = require('bcrypt');
 const csrf = require('tiny-csrf');
 const cookieParser = require('cookie-parser');
+const flash = require('connect-flash');
 require('dotenv').config();
 
 const {pool} = require('./database/connect_db.js');
@@ -35,6 +36,12 @@ app.use(session({
     }
 }));
 
+app.use(flash());
+app.use((request, response, next) => {
+  response.locals.flash = request.flash();
+  next();
+});
+
 app.use(csrf(
     process.env.csrf_secret,
     ["POST","PATCH","DELETE","PUT"]
@@ -61,8 +68,7 @@ const strategy = new localStrategy(async (username,password,done) => {
                     return done(null,result[0]);
                 }
                 else{
-                    console.log("incorrect password");
-                    return done(null,false);
+                    return done(null,false,{message : "incorrect password"});
                 }
             }
             catch(err) {
@@ -70,8 +76,7 @@ const strategy = new localStrategy(async (username,password,done) => {
             }
         }
         else{
-            console.log("no user with that username");
-            return done(null,false);
+            return done(null,false,{message : "username does not exist"});
         }
     }
     catch(err) {
@@ -115,6 +120,9 @@ app.use("/todo",isAuth);
 app.use(Router);
 app.use(userRouter);
 app.use(todoRouter);
+app.get("/",(request,response) => {
+    response.render("home.ejs");
+});
 
 app.listen(process.env.port,(request,response) => {
     console.log(`server is listening to port ${process.env.port}`);

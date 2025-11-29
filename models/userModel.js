@@ -32,7 +32,7 @@ const addUser = async(user) => {
             return result;
         }
         catch(err) {
-            console.log("couldn't add the user to database");
+            console.log("error while trying to add new user");
             throw err;
         }
     }
@@ -41,4 +41,20 @@ const addUser = async(user) => {
         throw err;
     }
 }
-module.exports = { createUserTable, addUser };
+
+const usernameTaken = async(username) => {
+    const userSQL = "select * from user where username = ?";
+    const placeHolder = [username];
+    try {
+        const [result] = await pool.query(userSQL,placeHolder);
+        if(result.length)
+            return true;
+        return false;
+    }
+    catch(err) {
+        console.log("error while checking if username is taken");
+        throw err;
+    }
+}
+
+module.exports = { createUserTable, addUser, usernameTaken};

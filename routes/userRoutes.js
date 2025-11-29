@@ -5,7 +5,7 @@ const passport = require('passport');
 const { signup, login, addNewUser} = require('../controllers/userController.js');
 
 
-userRouter.post("/login",passport.authenticate('local',{ successRedirect : "/todo", failureRedirect: "/login"}));
+userRouter.post("/login",passport.authenticate('local',{ successRedirect : "/todo", failureRedirect: "/login", failureFlash : true}));
 userRouter.get("/signup",signup);
 userRouter.post("/signup",addNewUser);
 userRouter.get("/login",login);
