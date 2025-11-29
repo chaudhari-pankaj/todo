@@ -8,6 +8,7 @@ const mysqlstore = require('express-mysql-session')(session);
 const bcrypt = require('bcrypt');
 const csrf = require('tiny-csrf');
 const cookieParser = require('cookie-parser');
+require('dotenv').config();
 
 const {pool} = require('./database/connect_db.js');
 const { Router }  = require('./routes/route.js');
@@ -24,7 +25,7 @@ app.use(cookieParser("cookie-parser-secret"));
 const sessionStore = new mysqlstore({},pool);
 
 app.use(session({
-    secret : "psst.. this is a secret",
+    secret : process.env.session_secret,
     store : sessionStore,
     resave : false,
     rolling : true,
@@ -35,7 +36,7 @@ app.use(session({
 }));
 
 app.use(csrf(
-    "1234567890thisisasecretkeykeepsa",
+    process.env.csrf_secret,
     ["POST","PATCH","DELETE","PUT"]
 ));// must be 32 characters long
 
@@ -115,8 +116,8 @@ app.use(Router);
 app.use(userRouter);
 app.use(todoRouter);
 
-app.listen(3000,(request,response) => {
-    console.log("server is listening to port 3000");
+app.listen(process.env.port,(request,response) => {
+    console.log(`server is listening to port ${process.env.port}`);
 });
 
 module.exports = { isAuth };

@@ -3,7 +3,7 @@
      //hash the passwords and store them
      //show only their todo tasks
 >> security
-     add csrf token
+     //add csrf token
      implement .evn file to save important stuff
 >> todo functionality
     // add new todo
